@@ -14,10 +14,10 @@ class Figure {
         this.expandFigureRight = false;
         this.startDrawing = false;
         this.posY = 0;
+        this.grabbing = false;
         this.drawShape();
     }
     drawingShape(){
-        console.log('oliz');
         if(!this.figureCreated){
             this.width = Math.abs(this.xB - this.xA);
             this.height = Math.abs(this.yB - this.yA);
@@ -95,7 +95,7 @@ class Figure {
             if(!this.figureCreated){
                 layer.draw();
             }else{ 
-                // this.activeEvents();
+                this.activeEvents();
                 // this.expandFigure();
                 clearInterval(this.interval);
             }
@@ -104,26 +104,31 @@ class Figure {
     activeEvents(){
         this.groupFigure.on('mousedown touchstart', evt => {
             this.createOtherFigure = false;
-            document.querySelector('#container').style.cursor = 'grabbing';
+            document.querySelector('#container').style.cursor = 'grab';
+            this.grabbing = true;
+            console.log('click');
         });
         this.groupFigure.on('mouseup touchend', evt => {
             this.createOtherFigure = true;
             document.querySelector('#container').style.cursor = 'grab';
-
+            this.grabbing = false;
             this.expandFigureLeft = false;
             this.expandFigureRight = false;
         });
         this.groupFigure.on('mouseover',evt => {
             document.querySelector('#container').style.cursor = 'grab';
-            this.zoneExpandFigureLeft.show();
-            this.zoneExpandFigureRight.show();
+            // this.zoneExpandFigureLeft.show();
+            // this.zoneExpandFigureRight.show();
             layer.draw();
         });
         this.groupFigure.on('mouseout',evt => {
-            document.querySelector('#container').style.cursor = 'crosshair';
-            this.zoneExpandFigureLeft.hide();
-            this.zoneExpandFigureRight.hide();
+            document.querySelector('#container').style.cursor = 'pointer';
+            // this.zoneExpandFigureLeft.hide();
+            // this.zoneExpandFigureRight.hide();
             layer.draw();
+        });
+        this.groupFigure.on('mousemove',evt => {
+            document.querySelector('#container').style.cursor = 'grab';
         });
     }
     expandFigure(){
